@@ -1,12 +1,37 @@
+/*
+ * The MIT License
+ *
+ * Copyright (c) 2017-2017 Paulo Miguel Almeida <paulo.miguel.almeida.rodenas(at)gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package com.github.paulomigalmeida.downloadfilefromtarins3.main;
 
 import com.github.paulomigalmeida.downloadfilefromtarins3.base.parser.AbstractBaseParser;
+import com.github.paulomigalmeida.downloadfilefromtarins3.download.controller.DownloadFlowController;
+import com.github.paulomigalmeida.downloadfilefromtarins3.download.parser.DownloadProgramParser;
 import com.github.paulomigalmeida.downloadfilefromtarins3.upload.controller.UploadFlowController;
 import com.github.paulomigalmeida.downloadfilefromtarins3.upload.parser.UploadProgramParser;
 import org.apache.commons.cli.*;
 
-import static com.github.paulomigalmeida.downloadfilefromtarins3.base.utils.IConstants.DEFAULT_CMD_LINE_SYNTAX;
-import static com.github.paulomigalmeida.downloadfilefromtarins3.base.utils.IConstants.UPLOAD_CMD_LINE_SYNTAX;
+import static com.github.paulomigalmeida.downloadfilefromtarins3.base.utils.IConstants.*;
 
 public class Main {
 
@@ -47,6 +72,8 @@ public class Main {
             formatter.printHelp(DEFAULT_CMD_LINE_SYNTAX, options);
             System.out.println("\n");
             formatter.printHelp(UPLOAD_CMD_LINE_SYNTAX, new UploadProgramParser().getOptions());
+            System.out.println("\n");
+            formatter.printHelp(DOWNLOAD_CMD_LINE_SYNTAX, new DownloadProgramParser().getOptions());
         }
     }
 
@@ -63,10 +90,17 @@ public class Main {
                 baseParser.run(args);
 
                 // Initiate the Upload flow
-                UploadFlowController flowController = new UploadFlowController();
-                flowController.execute();
+                UploadFlowController uploadFlowController = new UploadFlowController();
+                uploadFlowController.execute();
                 break;
             case "download":
+                // Parse download arguments
+                baseParser = new DownloadProgramParser();
+                baseParser.run(args);
+
+                // Initiate the Download flow
+                DownloadFlowController downloadFlowController = new DownloadFlowController();
+                downloadFlowController.execute();
                 break;
             default:
                 System.err.println("Error while parsing arguments: Invalid operation");

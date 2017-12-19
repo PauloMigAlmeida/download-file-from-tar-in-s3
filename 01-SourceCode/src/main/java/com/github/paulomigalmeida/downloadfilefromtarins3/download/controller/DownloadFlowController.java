@@ -22,41 +22,43 @@
  * THE SOFTWARE.
  */
 
-package com.github.paulomigalmeida.downloadfilefromtarins3.upload.controller;
+package com.github.paulomigalmeida.downloadfilefromtarins3.download.controller;
 
 import com.github.paulomigalmeida.downloadfilefromtarins3.base.controller.AbstractController;
 import com.github.paulomigalmeida.downloadfilefromtarins3.base.service.s3.S3Service;
-import com.github.paulomigalmeida.downloadfilefromtarins3.upload.operation.TarMetadataFileGenerator;
-import com.github.paulomigalmeida.downloadfilefromtarins3.upload.parser.UploadProgramArgumentsSingleton;
-
-import java.io.File;
+import com.github.paulomigalmeida.downloadfilefromtarins3.base.tar.TarFileEntry;
+import com.github.paulomigalmeida.downloadfilefromtarins3.download.operation.TarMetadataFileSearcher;
+import com.github.paulomigalmeida.downloadfilefromtarins3.download.parser.DownloadProgramArgumentsSingleton;
 
 import static com.github.paulomigalmeida.downloadfilefromtarins3.base.utils.IConstants.TAR_METADATA_FILE_SUFFIX;
 
-public class UploadFlowController extends AbstractController<Void> {
+public class DownloadFlowController extends AbstractController<Void> {
 
     @Override
     public Void execute() throws Exception {
-        File inputFile = UploadProgramArgumentsSingleton.getInstance().getFile();
-
-        // Generating tar metadata file
-        TarMetadataFileGenerator tarMetadataFileGenerator = new TarMetadataFileGenerator(inputFile);
-        File metadataFile = tarMetadataFileGenerator.performOperation();
-
-        // Uploading both tar and metadata files
         S3Service s3Service = new S3Service();
 
-        s3Service.uploadFile(
-                UploadProgramArgumentsSingleton.getInstance().getBucketName(),
-                UploadProgramArgumentsSingleton.getInstance().getKeyName(),
-                inputFile
-        );
-        s3Service.uploadFile(
-                UploadProgramArgumentsSingleton.getInstance().getBucketName(),
-                UploadProgramArgumentsSingleton.getInstance().getKeyName() + TAR_METADATA_FILE_SUFFIX,
-                metadataFile
+        // Download tar metadata file
+        byte[] tarMetadataFileBytes = s3Service.downloadFile(
+                DownloadProgramArgumentsSingleton.getInstance().getBucketName(),
+                DownloadProgramArgumentsSingleton.getInstance().getKeyName() + TAR_METADATA_FILE_SUFFIX
         );
 
+        // search for tar file entry
+        TarMetadataFileSearcher tarMetadataFileSearcher = new TarMetadataFileSearcher(
+                tarMetadataFileBytes,
+                DownloadProgramArgumentsSingleton.getInstance().getTarFileEntry()
+        );
+        TarFileEntry tarFileEntry = tarMetadataFileSearcher.performOperation();
+
+        // if found download it to the specified destination
+        s3Service.downloadFile(
+                DownloadProgramArgumentsSingleton.getInstance().getBucketName(),
+                DownloadProgramArgumentsSingleton.getInstance().getKeyName(),
+                DownloadProgramArgumentsSingleton.getInstance().getOutput(),
+                tarFileEntry.getFileStartPosition(),
+                tarFileEntry.getFileEndPosition()
+                );
         return null;
     }
 
