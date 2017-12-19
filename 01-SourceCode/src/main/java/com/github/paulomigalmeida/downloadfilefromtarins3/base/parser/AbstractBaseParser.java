@@ -8,9 +8,9 @@ public abstract class AbstractBaseParser {
 
     public abstract void run(String[] args);
 
-    public void showUsage(){
+    public void showUsage(String cmdLineSyntax){
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("",options);
+        formatter.printHelp(cmdLineSyntax,options);
     }
 
     public Options getOptions() {

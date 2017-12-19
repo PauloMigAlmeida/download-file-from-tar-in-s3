@@ -1,15 +1,20 @@
 package com.github.paulomigalmeida.downloadfilefromtarins3.main;
 
+import com.github.paulomigalmeida.downloadfilefromtarins3.base.parser.AbstractBaseParser;
+import com.github.paulomigalmeida.downloadfilefromtarins3.upload.controller.UploadFlowController;
 import com.github.paulomigalmeida.downloadfilefromtarins3.upload.parser.UploadProgramParser;
 import org.apache.commons.cli.*;
 
+import static com.github.paulomigalmeida.downloadfilefromtarins3.base.utils.IConstants.DEFAULT_CMD_LINE_SYNTAX;
+import static com.github.paulomigalmeida.downloadfilefromtarins3.base.utils.IConstants.UPLOAD_CMD_LINE_SYNTAX;
+
 public class Main {
 
-    static class MainParser{
+    static class MainParser {
 
         private Options options;
 
-        MainParser(){
+        MainParser() {
             Option help = new Option("help", "print this message");
             Option operation = Option.builder("operation")
                     .required()
@@ -22,12 +27,12 @@ public class Main {
             options.addOption(operation);
         }
 
-        String run(String[] args){
+        String run(String[] args) {
             // create the parser
             CommandLineParser parser = new DefaultParser();
             try {
                 // parse the command line arguments
-                CommandLine line = parser.parse(options, args);
+                CommandLine line = parser.parse(options, args, true);
                 return line.getOptionValue("operation");
             } catch (ParseException exp) {
                 System.err.println("Parsing failed.  Reason: " + exp.getMessage());
@@ -37,20 +42,29 @@ public class Main {
             }
         }
 
-        void showUsage(){
+        void showUsage() {
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("java -jar download-file-from-tar-in-s3.jar options", options);
+            formatter.printHelp(DEFAULT_CMD_LINE_SYNTAX, options);
             System.out.println("\n");
-            formatter.printHelp("java -jar download-file-from-tar-in-s3.jar upload options", new UploadProgramParser().getOptions());
+            formatter.printHelp(UPLOAD_CMD_LINE_SYNTAX, new UploadProgramParser().getOptions());
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
+        // Parsers
         MainParser parser = new MainParser();
+        AbstractBaseParser baseParser;
 
-        // Options parse
+        // Base options parse
         switch (parser.run(args)) {
             case "upload":
+                // Parse upload arguments
+                baseParser = new UploadProgramParser();
+                baseParser.run(args);
+
+                // Initiate the Upload flow
+                UploadFlowController flowController = new UploadFlowController();
+                flowController.execute();
                 break;
             case "download":
                 break;
