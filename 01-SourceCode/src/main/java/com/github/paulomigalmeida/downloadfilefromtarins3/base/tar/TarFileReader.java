@@ -8,7 +8,8 @@ import java.util.Arrays;
 public class TarFileReader {
 
     private static int TAR_POSIX_HEADER_LENGTH = 512;
-    private static int TAR_TERMINATION_BLOCK = 1024;
+    private static int TAR_DEFAULT_BLOCK_SIZE = 512;
+    private static int TAR_TERMINATION_BLOCK = TAR_DEFAULT_BLOCK_SIZE * 2;
 
     private File file;
 
@@ -88,7 +89,7 @@ public class TarFileReader {
             System.out.println(devminor);
             System.out.println(prefix);
 
-            position += (long)(Math.ceil((TAR_POSIX_HEADER_LENGTH + Integer.parseInt(size,8)) / 512.0) * 512);
+            position += (long)(Math.ceil((TAR_POSIX_HEADER_LENGTH + Integer.parseInt(size,8)) / ((double)TAR_DEFAULT_BLOCK_SIZE)) * TAR_DEFAULT_BLOCK_SIZE);
         }
 
     }
