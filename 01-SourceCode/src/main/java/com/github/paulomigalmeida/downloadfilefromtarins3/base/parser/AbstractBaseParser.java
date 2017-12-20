@@ -24,15 +24,32 @@
 
 package com.github.paulomigalmeida.downloadfilefromtarins3.base.parser;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractBaseParser {
 
     protected Options options;
 
-    public abstract void run(String[] args);
+    protected abstract void parse(String[] args);
 
-    public void showUsage(String cmdLineSyntax){
+    public void run(String[] args){
+        // Remove operation parameter since it's a logical parameter only
+        List<String> newArgs = new ArrayList<>();
+        for (int i = 0; i < args.length; i++) {
+            if(args[i].equals("-operation")){
+                i++;
+            }else{
+                newArgs.add(args[i]);
+            }
+        }
+        parse(newArgs.toArray(new String[0]));
+    }
+
+    protected void showUsage(String cmdLineSyntax){
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp(cmdLineSyntax,options);
     }

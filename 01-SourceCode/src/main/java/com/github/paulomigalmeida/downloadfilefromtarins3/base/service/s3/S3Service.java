@@ -62,10 +62,7 @@ public class S3Service {
 
         outputFile.mkdirs();
 
-        Files.copy(
-                s3is,
-                outputFile.toPath(),
-                StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(s3is, outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
         s3is.close();
     }

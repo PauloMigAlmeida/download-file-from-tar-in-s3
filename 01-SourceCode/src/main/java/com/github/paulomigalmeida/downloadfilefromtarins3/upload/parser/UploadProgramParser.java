@@ -34,12 +34,6 @@ import static com.github.paulomigalmeida.downloadfilefromtarins3.base.utils.ICon
 public class UploadProgramParser extends AbstractBaseParser {
 
     public UploadProgramParser() {
-        Option operation = Option.builder("operation")
-                .required()
-                .hasArg()
-                .desc("Operation - It needs to be either upload or download")
-                .numberOfArgs(1).build();
-
         Option bucketName = Option.builder("aws_bucket_name")
                 .required()
                 .hasArg()
@@ -49,7 +43,7 @@ public class UploadProgramParser extends AbstractBaseParser {
         Option keyName = Option.builder("aws_key_name")
                 .required()
                 .hasArg()
-                .desc("S3 bucket name")
+                .desc("S3 key name")
                 .numberOfArgs(1).build();
 
         Option file = Option.builder("file")
@@ -59,13 +53,12 @@ public class UploadProgramParser extends AbstractBaseParser {
                 .numberOfArgs(1).build();
 
         options = new Options();
-        options.addOption(operation);
         options.addOption(bucketName);
         options.addOption(keyName);
         options.addOption(file);
     }
 
-    public void run(String[] args) {
+    protected void parse(String[] args) {
         // create the parser
         CommandLineParser parser = new DefaultParser();
         try {
