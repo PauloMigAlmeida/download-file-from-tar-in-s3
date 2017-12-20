@@ -49,7 +49,7 @@ public class DownloadProgramParser extends AbstractBaseParser {
         Option tarFileEntry = Option.builder("tar_file_entry")
                 .required()
                 .hasArg()
-                .desc("entry within the tar file")
+                .desc("entry in the tar file")
                 .numberOfArgs(1).build();
 
         Option output = Option.builder("output")
