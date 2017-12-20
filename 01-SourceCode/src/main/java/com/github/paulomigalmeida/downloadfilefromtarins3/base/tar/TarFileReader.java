@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TarFileReader {
@@ -58,7 +57,6 @@ public class TarFileReader {
             }
 
             TarFileEntry tarFileEntry = new TarFileEntry(bytes, (position + TAR_POSIX_HEADER_LENGTH));
-            System.out.println(tarFileEntry.toString());
             returnList.add(tarFileEntry);
 
             position += (long)(Math.ceil((TAR_POSIX_HEADER_LENGTH + tarFileEntry.getSizeInDecimal()) /

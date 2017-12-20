@@ -17,6 +17,9 @@ As a result, some architect/developers opt for compressing multiple files into a
 It's essential to understand that this is at an experimental stage and not all features of the tar file format are implemented at this time. If you want to see a feature developed/released sooner, please feel free submit your PR ;)
 
 
+![Example](02-Documentation/01-Assets/example.png)
+
+
 ## Build
 
 ```Shell

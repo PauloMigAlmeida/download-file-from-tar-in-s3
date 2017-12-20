@@ -27,3 +27,6 @@ hs_err_pid*
 *.xccheckout
 *.iml
 target/
+
+#Mac
+*.DS_Store
