@@ -18,6 +18,7 @@ It's essential to understand that this is at an experimental stage and not all f
 
 
 ![Example](02-Documentation/01-Assets/example.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FPauloMigAlmeida%2Fdownload-file-from-tar-in-s3.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FPauloMigAlmeida%2Fdownload-file-from-tar-in-s3?ref=badge_shield)
 
 
 ## Build
@@ -48,3 +49,7 @@ usage: java -jar download-file-from-tar-in-s3.jar -operation download
  -output <arg>            destination file
  -tar_file_entry <arg>    entry in the tar file
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FPauloMigAlmeida%2Fdownload-file-from-tar-in-s3.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FPauloMigAlmeida%2Fdownload-file-from-tar-in-s3?ref=badge_large)
